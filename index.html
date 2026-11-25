@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini Google 1998</title>
+  <style>
+    /* 1998 Retro Google Stylesheet */
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #ffffff;
+      color: #000000;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+
+    /* Colorful 1998 Google-style Logo */
+    .logo {
+      font-family: "Times New Roman", Times, serif;
+      font-size: 54px;
+      font-weight: bold;
+      letter-spacing: -1px;
+      margin-top: 25px;
+      margin-bottom: 8px;
+      user-select: none;
+    }
+    .c-blue   { color: #204ce5; }
+    .c-red    { color: #dc241f; }
+    .c-yellow { color: #f5b300; }
+    .c-green  { color: #009925; }
+
+    .tagline {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+
+    /* Search Box & Controls */
+    .search-box-container {
+      background: #eeeeee;
+      border: 2px outset #cccccc;
+      display: inline-block;
+      padding: 16px 28px;
+      margin-bottom: 20px;
+    }
+    input[type="text"] {
+      font-size: 16px;
+      padding: 6px 10px;
+      width: 320px;
+      border: 1px solid #777;
+    }
+    button {
+      font-size: 14px;
+      font-weight: bold;
+      padding: 6px 14px;
+      margin: 4px;
+      cursor: pointer;
+    }
+    .sample-tags {
+      margin-top: 10px;
+      font-size: 13px;
+      color: #333;
+    }
+    .sample-link {
+      color: #0000cc;
+      text-decoration: underline;
+      cursor: pointer;
+      margin: 0 4px;
+    }
+
+    /* Side-by-Side Results Columns */
+    .results-container {
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+      max-width: 1050px;
+      margin: 20px auto 0;
+      text-align: left;
+    }
+    .column {
+      flex: 1;
+      background: #fafafa;
+      border: 1px solid #c0c0c0;
+      border-radius: 4px;
+      padding: 15px 18px;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.06);
+    }
+    .column-header {
+      border-bottom: 2px solid #555;
+      padding-bottom: 6px;
+      margin-bottom: 14px;
+    }
+    .column-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin: 0;
+    }
+    .column-subtitle {
+      font-size: 12px;
+      color: #555;
+      margin: 4px 0 0 0;
+    }
+
+    /* Result Card Styles */
+    .result-card {
+      background: #ffffff;
+      border: 1px solid #ddd;
+      border-left: 4px solid #204ce5;
+      padding: 10px 12px;
+      margin-bottom: 12px;
+    }
+    .pagerank-col .result-card {
+      border-left-color: #009925;
+    }
+    .result-rank {
+      font-size: 12px;
+      font-weight: bold;
+      color: #777;
+      margin-bottom: 2px;
+    }
+    .result-url {
+      font-size: 16px;
+      color: #0000cc;
+      font-weight: bold;
+      text-decoration: underline;
+      word-break: break-all;
+    }
+    .result-score {
+      display: inline-block;
+      margin-top: 4px;
+      padding: 2px 6px;
+      font-size: 12px;
+      font-weight: bold;
+      border-radius: 3px;
+    }
+    .score-old {
+      background: #ffe8e8;
+      color: #b30000;
+      border: 1px solid #f5b0b0;
+    }
+    .score-pagerank {
+      background: #e6f7e8;
+      color: #007718;
+      border: 1px solid #a3e4ab;
+    }
+    .result-snippet {
+      font-size: 13px;
+      color: #333333;
+      margin-top: 6px;
+      line-height: 1.4;
+    }
+    .highlight {
+      background-color: #ffff77;
+      font-weight: bold;
+    }
+    .empty-message {
+      color: #666;
+      font-style: italic;
+      padding: 15px;
+      text-align: center;
+    }
+
+    /* Footer Note for AI Lab */
+    .footer-note {
+      margin-top: 40px;
+      font-size: 12px;
+      color: #777;
+      border-top: 1px solid #ddd;
+      padding-top: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Retro 1998 Google Logo -->
+  <div class="logo">
+    <span class="c-blue">M</span><span class="c-red">i</span><span class="c-yellow">n</span><span class="c-blue">i</span> 
+    <span class="c-blue">G</span><span class="c-red">o</span><span class="c-yellow">o</span><span class="c-blue">g</span><span class="c-green">l</span><span class="c-red">e</span> 
+    <span class="c-blue">1</span><span class="c-yellow">9</span><span class="c-red">9</span><span class="c-green">8</span>!
+  </div>
+  <div class="tagline">Stanford AI Lab Demo: Keyword Frequency vs. Random Surfer PageRank</div>
+
+  <!-- Search Box Container -->
+  <div class="search-box-container">
+    <div>
+      <input type="text" id="queryInput" placeholder="Type a word (e.g. pizza, pune)..." autofocus>
+      <button id="searchBtn">Google Search</button>
+      <button id="rerunBtn" title="Re-run the 100,000 moves simulation">Re-run Surfer</button>
+    </div>
+    <div class="sample-tags">
+      Quick test queries:
+      <span class="sample-link" onclick="quickSearch('pizza')">"pizza" (try this!)</span> |
+      <span class="sample-link" onclick="quickSearch('pune')">"pune"</span> |
+      <span class="sample-link" onclick="quickSearch('food')">"food"</span> |
+      <span class="sample-link" onclick="quickSearch('chai')">"chai"</span>
+    </div>
+  </div>
+
+  <!-- Search Results (Two Columns Side-by-Side) -->
+  <div class="results-container" id="resultsContainer">
+    <!-- Left Column: Old Way -->
+    <div class="column old-col">
+      <div class="column-header">
+        <h3 class="column-title">👈 Old Way: Keyword Count</h3>
+        <p class="column-subtitle">Sorted strictly by how many times the search word appears</p>
+      </div>
+      <div id="oldResults">
+        <div class="empty-message">Enter a search word above to see results.</div>
+      </div>
+    </div>
+
+    <!-- Right Column: PageRank Way -->
+    <div class="column pagerank-col">
+      <div class="column-header">
+        <h3 class="column-title">👉 PageRank Way: Random Surfer</h3>
+        <p class="column-subtitle">Sorted by page authority calculated over 100,000 surfer visits</p>
+      </div>
+      <div id="pageRankResults">
+        <div class="empty-message">Enter a search word above to see results.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    Built for First-Year AI Lab &bull; Monte Carlo Random Surfer: 100,000 steps with 15% boredom damping &bull; Mini Google 1998
+  </div>
+
+  <script>
+    // ==========================================
+    // STEP 1: Our Web Pages Data
+    // Each page has: page number (id), URL, text, and outgoing links
+    // ==========================================
+    const pages = [
+      {
+        id: 1,
+        url: "pune-food-guide.com",
+        text: "Where to eat in Pune - vada pav and biryani and pizza",
+        links: [2]
+      },
+      {
+        id: 2,
+        url: "best-pizza-pune.com",
+        text: "Fresh wood-fired pizza made daily - try our cheese pizza",
+        links: [1, 3]
+      },
+      {
+        id: 3,
+        url: "college-canteen-blog.com",
+        text: "Student reviews of canteen food and chai and Friday pizza",
+        links: [2, 4]
+      },
+      {
+        id: 4,
+        url: "pizza-recipes-home.com",
+        text: "Make pizza at home - pizza dough and pizza sauce",
+        links: [2, 5]
+      },
+      {
+        id: 5,
+        url: "cheap-eats-pune.com",
+        text: "Good food under 100 rupees - misal and dosa and pizza slices",
+        links: [2]
+      },
+      {
+        id: 6,
+        url: "pizza-pizza-pizza.com",
+        text: "pizza pizza pizza pizza pizza pizza pizza pizza pizza pizza",
+        links: [1]
+      }
+    ];
+
+    // Total moves for our Random Surfer simulation
+    const TOTAL_MOVES = 100000;
+
+    // ==========================================
+    // STEP 2: Work Out PageRank with a Random Surfer
+    // ==========================================
+    function calculatePageRank() {
+      // 1. Prepare visit counters for each page (all start at 0)
+      const visits = {};
+      pages.forEach(p => { visits[p.id] = 0; });
+
+      // 2. Start on a random page
+      let currentIndex = Math.floor(Math.random() * pages.length);
+      let currentPage = pages[currentIndex];
+
+      // 3. Make 100,000 moves
+      for (let i = 0; i < TOTAL_MOVES; i++) {
+        // Roll the dice: 15% chance to get bored and jump to any random page
+        const isBored = Math.random() < 0.15;
+
+        if (isBored || currentPage.links.length === 0) {
+          // Jump to a random page
+          currentIndex = Math.floor(Math.random() * pages.length);
+          currentPage = pages[currentIndex];
+        } else {
+          // Otherwise, follow one of the page's links at random
+          const randomLinkIndex = Math.floor(Math.random() * currentPage.links.length);
+          const targetPageId = currentPage.links[randomLinkIndex];
+          currentPage = pages.find(p => p.id === targetPageId);
+        }
+
+        // Count this visit
+        visits[currentPage.id]++;
+      }
+
+      // 4. PageRank = visits divided by total moves, shown as a percentage
+      pages.forEach(p => {
+        const percentage = (visits[p.id] / TOTAL_MOVES) * 100;
+        p.pageRankPercent = percentage.toFixed(2); // e.g. "38.25"
+        p.visits = visits[p.id];
+      });
+    }
+
+    // ==========================================
+    // STEP 3: Helper Functions
+    // ==========================================
+
+    // Count how many times a word appears in a text (ignoring capital letters)
+    function countOccurrences(fullText, searchWord) {
+      if (!searchWord) return 0;
+      // Convert both to lowercase for case-insensitivity
+      const lowerText = fullText.toLowerCase();
+      const lowerWord = searchWord.toLowerCase();
+
+      // Split by non-alphanumeric characters to match whole or partial tokens
+      // Using regex match for reliable word counts
+      const regex = new RegExp(escapeRegex(lowerWord), "g");
+      const matches = lowerText.match(regex);
+      return matches ? matches.length : 0;
+    }
+
+    // Safely escape special characters in regular expressions
+    function escapeRegex(string) {
+      return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    // Highlight the search term inside snippet text
+    function highlightText(text, searchWord) {
+      if (!searchWord) return text;
+      const regex = new RegExp(`(${escapeRegex(searchWord)})`, "gi");
+      return text.replace(regex, '<span class="highlight">$1</span>');
+    }
+
+    // ==========================================
+    // STEP 4: Perform Search & Render Both Columns
+    // ==========================================
+    function doSearch() {
+      const query = document.getElementById("queryInput").value.trim();
+      const oldResultsDiv = document.getElementById("oldResults");
+      const pageRankResultsDiv = document.getElementById("pageRankResults");
+
+      if (!query) {
+        oldResultsDiv.innerHTML = '<div class="empty-message">Please type a word to search!</div>';
+        pageRankResultsDiv.innerHTML = '<div class="empty-message">Please type a word to search!</div>';
+        return;
+      }
+
+      // Filter pages whose text contains the query word (ignore capital letters)
+      const matchingPages = pages.filter(p => 
+        p.text.toLowerCase().includes(query.toLowerCase())
+      );
+
+      if (matchingPages.length === 0) {
+        const noMatch = `<div class="empty-message">No pages found containing "<b>${escapeHtml(query)}</b>".</div>`;
+        oldResultsDiv.innerHTML = noMatch;
+        pageRankResultsDiv.innerHTML = noMatch;
+        return;
+      }
+
+      // --- Left Column ("Old way"): Sorted by word count ---
+      const oldWayList = [...matchingPages].map(p => ({
+        ...p,
+        count: countOccurrences(p.text, query)
+      })).sort((a, b) => b.count - a.count);
+
+      let oldHtml = "";
+      oldWayList.forEach((p, idx) => {
+        oldHtml += `
+          <div class="result-card">
+            <div class="result-rank">#${idx + 1} Result</div>
+            <a class="result-url" href="http://${p.url}" target="_blank">${p.url}</a>
+            <div>
+              <span class="result-score score-old">Score: ${p.count} match${p.count === 1 ? '' : 'es'}</span>
+            </div>
+            <div class="result-snippet">${highlightText(escapeHtml(p.text), query)}</div>
+          </div>
+        `;
+      });
+      oldResultsDiv.innerHTML = oldHtml;
+
+      // --- Right Column ("PageRank way"): Sorted by PageRank ---
+      const pageRankList = [...matchingPages].sort(
+        (a, b) => parseFloat(b.pageRankPercent) - parseFloat(a.pageRankPercent)
+      );
+
+      let pageRankHtml = "";
+      pageRankList.forEach((p, idx) => {
+        pageRankHtml += `
+          <div class="result-card">
+            <div class="result-rank">#${idx + 1} Result</div>
+            <a class="result-url" href="http://${p.url}" target="_blank">${p.url}</a>
+            <div>
+              <span class="result-score score-pagerank">PageRank: ${p.pageRankPercent}% (${p.visits.toLocaleString()} visits)</span>
+            </div>
+            <div class="result-snippet">${highlightText(escapeHtml(p.text), query)}</div>
+          </div>
+        `;
+      });
+      pageRankResultsDiv.innerHTML = pageRankHtml;
+    }
+
+    // Quick helper to escape HTML special characters
+    function escapeHtml(str) {
+      return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    // Helper for sample links
+    function quickSearch(word) {
+      document.getElementById("queryInput").value = word;
+      doSearch();
+    }
+
+    // ==========================================
+    // STEP 5: Event Listeners & Startup
+    // ==========================================
+    document.getElementById("searchBtn").addEventListener("click", doSearch);
+
+    // Allow pressing "Enter" in the search box
+    document.getElementById("queryInput").addEventListener("keyup", function(event) {
+      if (event.key === "Enter") {
+        doSearch();
+      }
+    });
+
+    // Button to re-simulate surfer
+    document.getElementById("rerunBtn").addEventListener("click", function() {
+      calculatePageRank();
+      if (document.getElementById("queryInput").value.trim()) {
+        doSearch();
+      } else {
+        alert("Random surfer simulated 100,000 moves! Now search a word to see updated scores.");
+      }
+    });
+
+    // Run the 100,000-move simulation once immediately when page loads
+    calculatePageRank();
+
+    // Default search for pizza on initial load to show the comparison right away
+    quickSearch("pizza");
+  </script>
+</body>
+</html>
